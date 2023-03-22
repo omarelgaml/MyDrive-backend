@@ -1,4 +1,5 @@
 const CLIENT_HOME_PAGE_URL = 'http://localhost:5173/login';
+const Api401Error = require('../config/api401Error');
 
 exports.logout = async (req, res, next) => {
   req.logout((err) => {
@@ -18,9 +19,6 @@ exports.loginSuc = (req, res) => {
     });
   }
 };
-exports.loginFailed = (req, res) => {
-  res.status(401).send({
-    success: false,
-    message: 'user failed to authenticate.',
-  });
+exports.loginFailed = (_, res, next) => {
+  next(new Api401Error(`User not authenticated`));
 };

@@ -5,8 +5,13 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
-
 const passport = require('passport');
+
+const {
+  logError,
+  isOperationalError,
+  returnError,
+} = require('./middlewares/centralizedError');
 const authCheck = require('./middlewares/authCheck');
 
 require('dotenv').config();
@@ -37,7 +42,9 @@ app.use(
     saveUninitialized: false,
   })
 );
-app.use(passport.authenticate('session'));
+// app.use(passport.authenticate('session'));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(
   cors({
@@ -48,7 +55,7 @@ app.use(
 );
 app.use(express.static(path.join(__dirname, 'uploads')));
 app.use('/api/auth', authRoutes);
-app.use('/api/folders', /* authCheck, */ folderRoutes);
+app.use('/api/folders', authCheck, folderRoutes);
 
 app.get('/api/current-user', authCheck, async (req, res) => {
   req.session.cookie.expires = false;
@@ -61,6 +68,18 @@ app.get('/api/current-user', authCheck, async (req, res) => {
     cookies: req.cookies,
   });
 });
+app.use(logError);
+app.use(returnError);
+process.on('unhandledRejection', (error) => {
+  throw error;
+});
 
-// connect react to nodejs express server
+process.on('uncaughtException', (error) => {
+  logError(error);
+
+  if (!isOperationalError(error)) {
+    process.exit(1);
+  }
+});
+// connect react to nodjs express server
 app.listen(port, () => console.log(`Server is running on port ${port}!`));

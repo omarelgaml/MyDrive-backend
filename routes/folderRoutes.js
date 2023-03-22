@@ -14,7 +14,7 @@ const upload = multer({
 });
 
 router.post('/add-folder', foldersController.addFolder);
-router.post('/upload', upload.array('file'), foldersController.upload);
+// router.post('/upload', upload.array('file'), foldersController.upload);
 router.post(
   '/upload-to-folder',
   upload.array('uploadImages'),
