@@ -18,7 +18,7 @@ router.post('/add-folder', foldersController.addFolder);
 router.post(
   '/upload-to-folder',
   upload.array('uploadImages'),
-  foldersController.uploadToFolder
+  foldersController.uploadFiles
 );
 
 router.post('/get-by-id', foldersController.getFolderbyId);
@@ -26,7 +26,7 @@ router.post('/add-folder-to-folder', foldersController.addFolderToFolder);
 router.post(
   '/add-file-to-user',
   upload.array('uploadImages'),
-  foldersController.addFilestoUser
+  foldersController.uploadFiles
 );
 
 module.exports = router;

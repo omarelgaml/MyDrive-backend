@@ -7,6 +7,10 @@ const UserSchema = new Schema({
   googleId: String,
   facebookId: String,
   fullName: String,
+  displayName: String,
+  totalStorage: { type: Number, default: 0 },
+  usedStorage: { type: Number, default: 0 },
+
   childFolders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'folders' }],
   files: [{ type: mongoose.Schema.Types.ObjectId, ref: 'files' }],
 });

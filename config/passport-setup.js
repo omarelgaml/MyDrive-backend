@@ -41,6 +41,7 @@ passport.use(
             name: profile.displayName,
             email: profile.emails[0].value,
             folders: [],
+            displayName: profile.displayName,
           });
         }
         user = await user.save();
@@ -59,7 +60,7 @@ passport.use(
       clientID: '699003638676633',
       clientSecret: '98547153bc7c3cbb85c96b58121033e0',
       callbackURL: '/api/auth/facebook/callback',
-      profileFields: ['email'],
+      profileFields: ['email', 'displayName'],
     },
     async (_accessToken, _refreshToken, profile, done) => {
       try {
@@ -74,6 +75,7 @@ passport.use(
             name: profile.displayName,
             email: profile.emails[0].value,
             folders: [],
+            displayName: profile.displayName,
           });
         }
         user = await user.save();

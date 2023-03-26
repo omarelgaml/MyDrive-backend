@@ -5,6 +5,7 @@ const { Schema } = mongoose;
 const fileSchema = new Schema({
   originalName: String,
   extension: String,
+  thumbnailUrl: String,
   createdAt: {
     type: Date,
     default: Date.now,

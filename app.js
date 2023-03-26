@@ -6,7 +6,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const passport = require('passport');
-
 const {
   logError,
   isOperationalError,
@@ -19,6 +18,7 @@ require('./config/database').connect();
 require('./models/File');
 require('./models/Folder');
 require('./models/User');
+require('./models/Packages');
 
 const User = mongoose.model('users');
 
@@ -32,6 +32,7 @@ const port = 3000;
 require('./config/passport-setup');
 const authRoutes = require('./routes/authRoutes');
 const folderRoutes = require('./routes/folderRoutes');
+const packagesRoutes = require('./routes/packagesRoutes');
 
 app.use(cookieParser());
 
@@ -54,8 +55,11 @@ app.use(
   })
 );
 app.use(express.static(path.join(__dirname, 'uploads')));
+app.use(express.static(path.join(__dirname, 'uploads/thumbnails')));
+
 app.use('/api/auth', authRoutes);
 app.use('/api/folders', authCheck, folderRoutes);
+app.use('/api/packages', authCheck, packagesRoutes);
 
 app.get('/api/current-user', authCheck, async (req, res) => {
   req.session.cookie.expires = false;
