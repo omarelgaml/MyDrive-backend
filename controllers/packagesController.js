@@ -53,8 +53,7 @@ exports.paymentSuccess = async (req, res, next) => {
     const sessionData = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (sessionData.payment_status === 'paid') {
-      const user = await User.findOne({ id: req.user._id });
-
+      const user = await User.findOne({ _id: req.user._id });
       user.totalStorage += Number(sessionData.metadata.storage);
 
       await user.save();
